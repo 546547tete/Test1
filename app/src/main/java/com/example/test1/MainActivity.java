@@ -14,5 +14,9 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(this, "666", Toast.LENGTH_SHORT).show();
         String s="sdas";
         //
+
+
+
+        int a = 10;
     }
 }
