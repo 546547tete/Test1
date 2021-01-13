@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.View;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -51,45 +51,55 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_menu, menu);
+        getMenuInflater().inflate(R.menu.home_menu,menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
+        switch (item.getItemId()){
             case R.id.menu_no:
                 List<BeanDao> queryAllno = DBHolper.getInstance().queryAll();
                 ArrayList<BeanDao> listno = new ArrayList<>();
-                for (BeanDao beanDao : queryAllno) {
-                    if (beanDao.getType().equals("1")) {
-                        listno.add(beanDao);
-                        homeAdapter.setData(listno);
+                if (queryAllno.size()<1){
+                    Toast.makeText(this, "您还没有添加过任务，请添加任务", Toast.LENGTH_SHORT).show();
+                }else {
+                    for (BeanDao beanDao : queryAllno) {
+                        if (beanDao.getType().equals("1")){
+                            listno.add(beanDao);
+                            homeAdapter.setData(listno);
+                        }
                     }
                 }
                 break;
             case R.id.menu_yes:
                 List<BeanDao> queryAllyes = DBHolper.getInstance().queryAll();
                 ArrayList<BeanDao> listyes = new ArrayList<>();
-                for (BeanDao beanDao : queryAllyes) {
-                    if (beanDao.getType().equals("2")) {
-                        listyes.add(beanDao);
-                        homeAdapter.setData(listyes);
+                if (queryAllyes.size()<1){
+                    Toast.makeText(this, "您还没有添加过任务，请添加任务", Toast.LENGTH_SHORT).show();
+                }else {
+                    for (BeanDao beanDao : queryAllyes) {
+                        if (beanDao.getType().equals("2")){
+                            listyes.add(beanDao);
+                            homeAdapter.setData(listyes);
+                        }
                     }
                 }
                 break;
             case R.id.menu_delete:
                 List<BeanDao> alldelete = DBHolper.getInstance().queryAll();
                 List<BeanDao> beanDaosdelete = new ArrayList<>();
-                for (BeanDao beanDao : alldelete) {
-                    if (beanDao.getType().equals("3")) {
-                        beanDaosdelete.add(beanDao);
-                        homeAdapter.setData(beanDaosdelete);
-                    } else {
-//                        BeanDao dao2 = new BeanDao((long) 999,"没有删除过的任务","3",false);
-//                        beanDaosdelete.add(dao2);
-                        Toast.makeText(this, "没有删除过的任务", Toast.LENGTH_SHORT).show();
-                        break;
+                if (alldelete.size()<1){
+                    Toast.makeText(this, "您还没有添加过任务，请添加任务", Toast.LENGTH_SHORT).show();
+                }else {
+                    for (BeanDao beanDao : alldelete) {
+                        if (beanDao.getType().equals("3")){
+                            beanDaosdelete.add(beanDao);
+                            homeAdapter.setData(beanDaosdelete);
+                        }else {
+                            Toast.makeText(this, "没有删除过的任务", Toast.LENGTH_SHORT).show();
+                            break;
+                        }
                     }
                 }
 
@@ -98,7 +108,7 @@ public class MainActivity extends AppCompatActivity {
                 List<BeanDao> all = DBHolper.getInstance().queryAll();
                 ArrayList<BeanDao> beanDaos = new ArrayList<>();
                 for (BeanDao beanDao : all) {
-                    if (!beanDao.getType().equals("3")) {
+                    if (!beanDao.getType().equals("3")){
                         beanDaos.add(beanDao);
                     }
                 }
@@ -109,21 +119,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        int type1 = (int) SpUtil.getParam("login_type", 0);
-        Long aLong = Long.valueOf(0);
-        List<String> arrayList = new ArrayList<>();
-        arrayList.add("扫地");
-        arrayList.add("洗衣服");
-        arrayList.add("做饭");
-        arrayList.add("洗澡");
-
-//        if (type1 == 1) {
-//            for (int i = 0; i < arrayList.size(); i++) {
-//                dao1 = new BeanDao((long) out, arrayList.get(i), "1", false);
-//                DBHolper.getInstance().insert(dao1);
-//                out++;
-//            }
-//        }
         all = DBHolper.getInstance().queryAll();
         homeAdapter.setData(all);
     }
@@ -134,6 +129,7 @@ public class MainActivity extends AppCompatActivity {
         rcy.setLayoutManager(new LinearLayoutManager(this));
         rcy.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         homeAdapter = new HomeAdapter(this);
+        homeAdapter.setData(all);
         rcy.setAdapter(homeAdapter);
         homeAdapter.notifyDataSetChanged();
 
@@ -150,18 +146,12 @@ public class MainActivity extends AppCompatActivity {
         final PopupWindow popupWindow = new PopupWindow(inflate, 600, 450);
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(true);
         popupWindow.showAtLocation(inflate, Gravity.CENTER, 0, 0);
 
         final EditText et_pop = inflate.findViewById(R.id.et_pop);
         Button btn_ok = inflate.findViewById(R.id.btn_ok);
         Button btn_no = inflate.findViewById(R.id.btn_no);
-        showKeyboard(et_pop);
-//et_pop.setOnClickListener(new View.OnClickListener() {
-//    @Override
-//    public void onClick(View v) {
-//        showKeyboard(et_pop);
-//    }
-//});
 
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override

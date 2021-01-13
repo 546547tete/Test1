@@ -6,13 +6,15 @@
     android:layout_height="match_parent">
 
     <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/et_pop"
         android:layout_gravity="center"
         android:layout_margin="20dp"
         android:hint="请输入事件名称"
+        android:textSize="20sp"
         android:gravity="center"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        />
 
 
     <LinearLayout
