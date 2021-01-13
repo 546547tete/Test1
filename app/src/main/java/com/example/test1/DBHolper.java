@@ -1,18 +1,18 @@
 package com.example.test1;
 
+import android.util.Log;
+
 import com.example.bean.BeanDao;
 import com.example.test1.db.BeanDaoDao;
 import com.example.test1.db.DaoMaster;
 import com.example.test1.db.DaoSession;
-
-import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.List;
 
 public class DBHolper {
     private static volatile DBHolper ourInstance = new DBHolper();
     private final BeanDaoDao beanDaoDao;
-
+    private static final String TAG = "DBHolper";
     public static DBHolper getInstance() {
         if (ourInstance == null) {
             synchronized (DBHolper.class) {
@@ -35,21 +35,18 @@ public class DBHolper {
     }
 
     public boolean insert(BeanDao beanDao) {
-//        if (!query(beanDao)) {
             beanDaoDao.insertOrReplace(beanDao);
             return true;
-//        } else {
-//            return false;
-//        }
     }
 
     private boolean query(BeanDao beanDao) {
         List<BeanDao> list = beanDaoDao.queryBuilder().where(BeanDaoDao.Properties.Name.eq(beanDao.getName())).list();
-        if (list != null && list.size() >= 0) {
+        Log.e(TAG, "query: "+list.size());
+        if (list.size() >= 0) {
             return true;
-        } else {
-            return false;
         }
+            return false;
+
     }
 
     public List<BeanDao> queryAll() {

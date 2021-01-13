@@ -8,12 +8,12 @@ import org.greenrobot.greendao.annotation.Generated;
 public class BeanDao {
 
     @Id(autoincrement = true)
-    private long id;
+    private Long id;
     private String name;
     private String type;
     private boolean chick;
-    @Generated(hash = 461738565)
-    public BeanDao(long id, String name, String type, boolean chick) {
+    @Generated(hash = 1507125197)
+    public BeanDao(Long id, String name, String type, boolean chick) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -22,10 +22,10 @@ public class BeanDao {
     @Generated(hash = 1438189893)
     public BeanDao() {
     }
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
     public String getName() {
