@@ -45,4 +45,5 @@ dependencies {
 //greenDAO配置  步骤4
     implementation 'org.greenrobot:greendao:3.2.2' // add library
     implementation 'org.greenrobot:greendao-generator:3.2.2'
+    implementation 'com.github.bumptech.glide:glide:4.11.0'
 }

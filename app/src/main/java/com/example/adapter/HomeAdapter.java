@@ -7,7 +7,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.bean.BeanDao;
+import com.example.test1.DBHolper;
 import com.example.test1.R;
 
 import java.util.List;
@@ -19,10 +21,16 @@ public class HomeAdapter extends RecyclerView.Adapter {
     private Context context;
     private List<BeanDao> list;
 
-    public HomeAdapter(Context context, List<BeanDao> list) {
+    public HomeAdapter(Context context) {
         this.context = context;
-        this.list = list;
+
     }
+
+    public void setData(List<BeanDao> list){
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
 
     @NonNull
     @Override
@@ -33,16 +41,34 @@ public class HomeAdapter extends RecyclerView.Adapter {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        BeanDao dao = list.get(position);
-        ViewHolder holder1= (ViewHolder) holder;
-        holder1.tv_rcy_name.setText(dao.getName());
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, final int position) {
+        final BeanDao bean = list.get(position);
+        final ViewHolder holder1= (ViewHolder) holder;
+        holder1.tv_rcy_name.setText(bean.getName());
         holder1.img_rcy_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                bean.setChick(!bean.getChick());
+                if (bean.getChick()){
+                    BeanDao beanDao = list.get(position);
+                    beanDao.setType("2");
+                    DBHolper.getInstance().upData(beanDao);
+                    notifyDataSetChanged();
+                    Glide.with(context).load(R.drawable.yes).into(holder1.img_rcy_check);
+                }else {
+                    BeanDao beanDao2 = list.get(position);
+                    beanDao2.setType("1");
+                    DBHolper.getInstance().upData(beanDao2);
+                    notifyDataSetChanged();
+                    Glide.with(context).load(R.drawable.eye).into(holder1.img_rcy_check);
+                }
             }
         });
+        if (bean.getChick()){
+            Glide.with(context).load(R.drawable.yes).into(holder1.img_rcy_check);
+        }else {
+            Glide.with(context).load(R.drawable.eye).into(holder1.img_rcy_check);
+        }
     }
 
     @Override

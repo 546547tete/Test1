@@ -3,4 +3,5 @@
 <item android:id="@+id/menu_no" android:icon="@drawable/eye" android:title="未完成"/>
 <item android:id="@+id/menu_yes" android:icon="@drawable/eye" android:title="已完成"/>
 <item android:id="@+id/menu_delete" android:icon="@drawable/eye" android:title="已删除"/>
+<item android:id="@+id/menu_all" android:icon="@drawable/eye" android:title="全部"/>
 </menu>
