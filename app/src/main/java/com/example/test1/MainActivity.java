@@ -20,6 +20,7 @@ import android.widget.PopupWindow;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity {
                         beanDaos.add(beanDao);
                     }
                 }
-                homeAdapter.setData(beanDaos);
+                homeAdapter.setData(all);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -140,6 +141,13 @@ public class MainActivity extends AppCompatActivity {
                 initPop();
             }
         });
+
+        //先实例化Callback
+        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(homeAdapter);
+//用Callback构造ItemtouchHelper
+        ItemTouchHelper touchHelper = new ItemTouchHelper(callback);
+//调用ItemTouchHelper的attachToRecyclerView方法建立联系
+        touchHelper.attachToRecyclerView(rcy);
     }
 
     private void initPop() {
@@ -160,7 +168,13 @@ public class MainActivity extends AppCompatActivity {
                 String trim = et_pop.getText().toString().trim();
                 BeanDao beanDao = new BeanDao(null, trim, "1", false);
                 DBHolper.getInstance().insert(beanDao);
-                List<BeanDao> beanDaos = DBHolper.getInstance().queryAll();
+                List<BeanDao> all = DBHolper.getInstance().queryAll();
+                ArrayList<BeanDao> beanDaos = new ArrayList<>();
+                for (BeanDao beanDaod : all) {
+                    if (!beanDao.getType().equals("3")) {
+                        beanDaos.add(beanDaod);
+                    }
+                }
                 homeAdapter.setData(beanDaos);
                 alpha(1);
                 popupWindow.dismiss();

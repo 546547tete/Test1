@@ -56,6 +56,7 @@ public class DBHolper {
 
     public boolean upData(BeanDao beanDao){
         if (query(beanDao)){
+            Log.e(TAG, "upData: " +beanDao);
             beanDaoDao.updateInTx(beanDao);
             return true;
         }

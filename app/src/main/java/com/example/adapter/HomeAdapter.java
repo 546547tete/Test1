@@ -10,14 +10,16 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.example.bean.BeanDao;
 import com.example.test1.DBHolper;
+import com.example.test1.ItemTouchHelperAdapter;
 import com.example.test1.R;
 
+import java.util.Collections;
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class HomeAdapter extends RecyclerView.Adapter {
+public class HomeAdapter extends RecyclerView.Adapter implements ItemTouchHelperAdapter {
     private Context context;
     private List<BeanDao> list;
 
@@ -62,6 +64,7 @@ public class HomeAdapter extends RecyclerView.Adapter {
                     notifyDataSetChanged();
                     Glide.with(context).load(R.drawable.eye).into(holder1.img_rcy_check);
                 }
+                DBHolper.getInstance().upData(bean);
             }
         });
         if (bean.getChick()){
@@ -74,6 +77,20 @@ public class HomeAdapter extends RecyclerView.Adapter {
     @Override
     public int getItemCount() {
         return list.size();
+    }
+    @Override
+    public void onItemMove(int fromPosition, int toPosition) {
+        Collections.swap(list,fromPosition,toPosition);
+        notifyItemMoved(fromPosition,toPosition);
+    }
+
+    @Override
+    public void onItemDissmiss(int position) {
+        BeanDao beanDao = list.get(position);
+        beanDao.setType("3");
+        DBHolper.getInstance().upData(beanDao);
+        list.remove(position);
+        notifyItemRemoved(position);
     }
 
     public static
