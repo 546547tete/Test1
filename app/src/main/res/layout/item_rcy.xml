@@ -11,6 +11,7 @@
             android:layout_height="50dp"
             android:text="符合规定"
             android:gravity="center_vertical"
+            android:textColor="@color/color_33"
             android:textSize="25sp"
             />
 

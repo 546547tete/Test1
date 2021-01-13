@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,35 +38,35 @@ public class MainActivity extends AppCompatActivity {
     private HomeAdapter homeAdapter;
     private List<BeanDao> all;
     private BeanDao dao1;
-    private int login_type = 1;
+    private int login_type;
+    private static final String LOGIN_TYPE = "login_type";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        SpUtil.setParam("login_type", login_type);
-        login_type++;
+
         initView();
         initData();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.home_menu,menu);
+        getMenuInflater().inflate(R.menu.home_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.menu_no:
                 List<BeanDao> queryAllno = DBHolper.getInstance().queryAll();
                 ArrayList<BeanDao> listno = new ArrayList<>();
-                if (queryAllno.size()<1){
+                if (queryAllno.size() < 1) {
                     Toast.makeText(this, "您还没有添加过任务，请添加任务", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     for (BeanDao beanDao : queryAllno) {
-                        if (beanDao.getType().equals("1")){
+                        if (beanDao.getType().equals("1")) {
                             listno.add(beanDao);
                             homeAdapter.setData(listno);
                         }
@@ -75,11 +76,11 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_yes:
                 List<BeanDao> queryAllyes = DBHolper.getInstance().queryAll();
                 ArrayList<BeanDao> listyes = new ArrayList<>();
-                if (queryAllyes.size()<1){
+                if (queryAllyes.size() < 1) {
                     Toast.makeText(this, "您还没有添加过任务，请添加任务", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     for (BeanDao beanDao : queryAllyes) {
-                        if (beanDao.getType().equals("2")){
+                        if (beanDao.getType().equals("2")) {
                             listyes.add(beanDao);
                             homeAdapter.setData(listyes);
                         }
@@ -89,14 +90,14 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_delete:
                 List<BeanDao> alldelete = DBHolper.getInstance().queryAll();
                 List<BeanDao> beanDaosdelete = new ArrayList<>();
-                if (alldelete.size()<1){
+                if (alldelete.size() < 1) {
                     Toast.makeText(this, "您还没有添加过任务，请添加任务", Toast.LENGTH_SHORT).show();
-                }else {
+                } else {
                     for (BeanDao beanDao : alldelete) {
-                        if (beanDao.getType().equals("3")){
+                        if (beanDao.getType().equals("3")) {
                             beanDaosdelete.add(beanDao);
                             homeAdapter.setData(beanDaosdelete);
-                        }else {
+                        } else {
                             Toast.makeText(this, "没有删除过的任务", Toast.LENGTH_SHORT).show();
                             break;
                         }
@@ -108,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
                 List<BeanDao> all = DBHolper.getInstance().queryAll();
                 ArrayList<BeanDao> beanDaos = new ArrayList<>();
                 for (BeanDao beanDao : all) {
-                    if (!beanDao.getType().equals("3")){
+                    if (!beanDao.getType().equals("3")) {
                         beanDaos.add(beanDao);
                     }
                 }
@@ -152,20 +153,27 @@ public class MainActivity extends AppCompatActivity {
         final EditText et_pop = inflate.findViewById(R.id.et_pop);
         Button btn_ok = inflate.findViewById(R.id.btn_ok);
         Button btn_no = inflate.findViewById(R.id.btn_no);
-
+        alpha(0.5f);
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String trim = et_pop.getText().toString().trim();
-                out++;
-                BeanDao beanDao = new BeanDao((long) out, trim, "1", false);
+//                out++;
+                int param = (int) SpUtil.getParam(LOGIN_TYPE, 0);
+                BeanDao beanDao = new BeanDao((long) param, trim, "1", false);
                 DBHolper.getInstance().insert(beanDao);
+                List<BeanDao> beanDaos = DBHolper.getInstance().queryAll();
+                homeAdapter.setData(beanDaos);
+                param++;
+                SpUtil.setParam(LOGIN_TYPE,param);
+                alpha(1);
                 popupWindow.dismiss();
             }
         });
         btn_no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                alpha(1);
                 popupWindow.dismiss();
             }
         });
@@ -173,7 +181,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showKeyboard(EditText editText) {
-        if(editText!=null){
+        if (editText != null) {
             //设置可获得焦点
             editText.setFocusable(true);
             editText.setFocusableInTouchMode(true);
@@ -186,4 +194,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void alpha(float alpha) {
+        WindowManager.LayoutParams attributes = getWindow().getAttributes();
+        attributes.alpha = alpha;
+
+        getWindow().setAttributes(attributes);
+    }
 }
