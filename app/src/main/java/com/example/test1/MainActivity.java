@@ -68,16 +68,19 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.menu_delete:
                 List<BeanDao> alldelete = DBHolper.getInstance().queryAll();
-                ArrayList<BeanDao> beanDaosdelete = new ArrayList<>();
+                List<BeanDao> beanDaosdelete = new ArrayList<>();
                 for (BeanDao beanDao : alldelete) {
                     if (beanDao.getType().equals("3")){
                         beanDaosdelete.add(beanDao);
                         homeAdapter.setData(beanDaosdelete);
                     }else {
+//                        BeanDao dao2 = new BeanDao((long) 999,"没有删除过的任务","3",false);
+//                        beanDaosdelete.add(dao2);
                         Toast.makeText(this, "没有删除过的任务", Toast.LENGTH_SHORT).show();
                         break;
                     }
                 }
+
                 break;
             case R.id.menu_all:
                 List<BeanDao> all = DBHolper.getInstance().queryAll();
