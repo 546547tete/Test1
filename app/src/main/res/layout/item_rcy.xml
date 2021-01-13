@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+        
+        <TextView
+            android:layout_marginLeft="10dp"
+            android:id="@+id/tv_rcy_name"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="符合规定"
+            android:gravity="center_vertical"
+            android:textSize="25sp"
+            />
+
+    <ImageView
+        android:id="@+id/img_rcy_check"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/eye"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        />
+
+</RelativeLayout>

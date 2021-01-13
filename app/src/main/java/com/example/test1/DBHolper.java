@@ -35,12 +35,12 @@ public class DBHolper {
     }
 
     public boolean insert(BeanDao beanDao) {
-        if (query(beanDao)) {
-            long insert = beanDaoDao.insert(beanDao);
+//        if (!query(beanDao)) {
+            beanDaoDao.insertOrReplace(beanDao);
             return true;
-        } else {
-            return false;
-        }
+//        } else {
+//            return false;
+//        }
     }
 
     private boolean query(BeanDao beanDao) {
@@ -52,12 +52,12 @@ public class DBHolper {
         }
     }
 
-    private List<BeanDao> queryAll() {
+    public List<BeanDao> queryAll() {
         List<BeanDao> list = beanDaoDao.loadAll();
         return list;
     }
 
-    private boolean upData(BeanDao beanDao){
+    public boolean upData(BeanDao beanDao){
         if (query(beanDao)){
             beanDaoDao.updateInTx(beanDao);
             return true;
