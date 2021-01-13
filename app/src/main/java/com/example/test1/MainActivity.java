@@ -1,5 +1,6 @@
 package com.example.test1;
 
+import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.MenuItem;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -145,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initPop() {
         View inflate = LayoutInflater.from(this).inflate(R.layout.item_popup, null);
-        final PopupWindow popupWindow = new PopupWindow(inflate, 600, 500);
+        final PopupWindow popupWindow = new PopupWindow(inflate, 600, 450);
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         popupWindow.setOutsideTouchable(true);
         popupWindow.showAtLocation(inflate, Gravity.CENTER, 0, 0);
@@ -153,7 +155,13 @@ public class MainActivity extends AppCompatActivity {
         final EditText et_pop = inflate.findViewById(R.id.et_pop);
         Button btn_ok = inflate.findViewById(R.id.btn_ok);
         Button btn_no = inflate.findViewById(R.id.btn_no);
-
+        showKeyboard(et_pop);
+//et_pop.setOnClickListener(new View.OnClickListener() {
+//    @Override
+//    public void onClick(View v) {
+//        showKeyboard(et_pop);
+//    }
+//});
 
         btn_ok.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -173,4 +181,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
     }
+
+    public void showKeyboard(EditText editText) {
+        if(editText!=null){
+            //设置可获得焦点
+            editText.setFocusable(true);
+            editText.setFocusableInTouchMode(true);
+            //请求获得焦点
+            editText.requestFocus();
+            //调用系统输入法
+            InputMethodManager inputManager = (InputMethodManager) editText
+                    .getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputManager.showSoftInput(editText, 0);
+        }
+    }
+
 }
