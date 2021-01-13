@@ -22,10 +22,12 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
 
+    int out = 0;
     private RecyclerView rcy;
     private ImageView img;
     private HomeAdapter homeAdapter;
     private List<BeanDao> all;
+    private BeanDao dao1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,19 +94,26 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initData() {
-        all = DBHolper.getInstance().queryAll();
-
-        if (all.size()<1){
-            BeanDao dao1 = new BeanDao(0,"扫地","1",false);
-            BeanDao dao2 = new BeanDao(1,"洗衣服","1",false);
-            BeanDao dao3 = new BeanDao(2,"做饭","1",false);
-            BeanDao dao4 = new BeanDao(3,"洗澡","1",false);
+        Long aLong = Long.valueOf(0);
+        List<String> arrayList = new ArrayList<>();
+        arrayList.add("扫地");
+        arrayList.add("洗衣服");
+        arrayList.add("做饭");
+        arrayList.add("洗澡");
+        for (int i = 0; i < arrayList.size(); i++) {
+            dao1 = new BeanDao((long) out,arrayList.get(i),"1",false);
             DBHolper.getInstance().insert(dao1);
-            DBHolper.getInstance().insert(dao2);
-            DBHolper.getInstance().insert(dao3);
-            DBHolper.getInstance().insert(dao4);
+            out++;
         }
+//        BeanDao dao1 = new BeanDao(aLong,"扫地","1",false);
+        BeanDao dao2 = new BeanDao(aLong,"洗衣服","1",false);
+        BeanDao dao3 = new BeanDao(aLong,"做饭","1",false);
+        BeanDao dao4 = new BeanDao(aLong,"洗澡","1",false);
 
+//        DBHolper.getInstance().insert(dao2);
+//        DBHolper.getInstance().insert(dao3);
+//        DBHolper.getInstance().insert(dao4);
+        all = DBHolper.getInstance().queryAll();
     }
 
     private void initView() {

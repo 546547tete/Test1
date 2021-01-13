@@ -24,7 +24,7 @@ public class BeanDaoDao extends AbstractDao<BeanDao, Long> {
      * Can be used for QueryBuilder and for referencing column names.
      */
     public static class Properties {
-        public final static Property Id = new Property(0, long.class, "id", true, "_id");
+        public final static Property Id = new Property(0, Long.class, "id", true, "_id");
         public final static Property Name = new Property(1, String.class, "name", false, "NAME");
         public final static Property Type = new Property(2, String.class, "type", false, "TYPE");
         public final static Property Chick = new Property(3, boolean.class, "chick", false, "CHICK");
@@ -43,7 +43,7 @@ public class BeanDaoDao extends AbstractDao<BeanDao, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"BEAN_DAO\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"NAME\" TEXT," + // 1: name
                 "\"TYPE\" TEXT," + // 2: type
                 "\"CHICK\" INTEGER NOT NULL );"); // 3: chick
@@ -58,7 +58,11 @@ public class BeanDaoDao extends AbstractDao<BeanDao, Long> {
     @Override
     protected final void bindValues(DatabaseStatement stmt, BeanDao entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String name = entity.getName();
         if (name != null) {
@@ -75,7 +79,11 @@ public class BeanDaoDao extends AbstractDao<BeanDao, Long> {
     @Override
     protected final void bindValues(SQLiteStatement stmt, BeanDao entity) {
         stmt.clearBindings();
-        stmt.bindLong(1, entity.getId());
+ 
+        Long id = entity.getId();
+        if (id != null) {
+            stmt.bindLong(1, id);
+        }
  
         String name = entity.getName();
         if (name != null) {
@@ -91,13 +99,13 @@ public class BeanDaoDao extends AbstractDao<BeanDao, Long> {
 
     @Override
     public Long readKey(Cursor cursor, int offset) {
-        return cursor.getLong(offset + 0);
+        return cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0);
     }    
 
     @Override
     public BeanDao readEntity(Cursor cursor, int offset) {
         BeanDao entity = new BeanDao( //
-            cursor.getLong(offset + 0), // id
+            cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // name
             cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // type
             cursor.getShort(offset + 3) != 0 // chick
@@ -107,7 +115,7 @@ public class BeanDaoDao extends AbstractDao<BeanDao, Long> {
      
     @Override
     public void readEntity(Cursor cursor, BeanDao entity, int offset) {
-        entity.setId(cursor.getLong(offset + 0));
+        entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
         entity.setName(cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1));
         entity.setType(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
         entity.setChick(cursor.getShort(offset + 3) != 0);
@@ -130,7 +138,7 @@ public class BeanDaoDao extends AbstractDao<BeanDao, Long> {
 
     @Override
     public boolean hasKey(BeanDao entity) {
-        throw new UnsupportedOperationException("Unsupported for entities with a non-null key");
+        return entity.getId() != null;
     }
 
     @Override
