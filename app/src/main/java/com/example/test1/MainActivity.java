@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initPop() {
         View inflate = LayoutInflater.from(this).inflate(R.layout.item_popup, null);
-        final PopupWindow popupWindow = new PopupWindow(inflate, 600, 450);
+        final PopupWindow popupWindow = new PopupWindow(inflate, 600, 400);
         popupWindow.setBackgroundDrawable(new ColorDrawable());
         popupWindow.setOutsideTouchable(true);
         popupWindow.setFocusable(true);
@@ -158,14 +158,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String trim = et_pop.getText().toString().trim();
-//                out++;
-                int param = (int) SpUtil.getParam(LOGIN_TYPE, 0);
-                BeanDao beanDao = new BeanDao((long) param, trim, "1", false);
+                BeanDao beanDao = new BeanDao(null, trim, "1", false);
                 DBHolper.getInstance().insert(beanDao);
                 List<BeanDao> beanDaos = DBHolper.getInstance().queryAll();
                 homeAdapter.setData(beanDaos);
-                param++;
-                SpUtil.setParam(LOGIN_TYPE,param);
                 alpha(1);
                 popupWindow.dismiss();
             }
@@ -175,6 +171,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 alpha(1);
                 popupWindow.dismiss();
+            }
+        });
+
+        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                alpha(1);
             }
         });
 
